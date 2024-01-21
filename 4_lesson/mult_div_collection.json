@@ -1,0 +1,227 @@
+{
+	"info": {
+		"_postman_id": "8a97b925-ac81-40e7-8468-5c2e4e3ac353",
+		"name": "Public SOAP APIs",
+		"description": "This is a collection of different SOAP APIs that are completley public and do not require any authentication, making it easier for consumers to play with and understand what APIs are all about by seeing the many different ways in which APIs can be used.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24210960",
+		"_collection_link": "https://www.postman.com/speeding-water-484600/workspace/geek-test/collection/24210960-8a97b925-ac81-40e7-8468-5c2e4e3ac353?action=share&creator=24210960&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Calculator",
+			"item": [
+				{
+					"name": "Divide",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObj = xml2Json(responseBody);\r",
+									"\r",
+									"var number1 = pm.collectionVariables.get(\"number1\");\r",
+									"var number2 = pm.collectionVariables.get(\"number2\");\r",
+									"\r",
+									"var expectedResult  = Math.floor(number1 / number2);\r",
+									"\r",
+									"console.log('number1', number1);\r",
+									"console.log('number2', number2);\r",
+									"console.log('expectedResult', expectedResult);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"test division\", function() {\r",
+									"    pm.expect(jsonObj['soap:Envelope']['soap:Body']['DivideResponse']['DivideResult']).to.eql(expectedResult.toString());\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let number1 = Math.floor((Math.random() * 100) + 1);\r",
+									"let number2 = Math.floor((Math.random() * 100) + 1);\r",
+									"\r",
+									"pm.collectionVariables.set(\"number1\", number1);\r",
+									"pm.collectionVariables.set(\"number2\", number2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml; charset=utf-8",
+								"type": "text"
+							},
+							{
+								"key": "SOAPAction",
+								"value": "http://tempuri.org/Divide",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <Divide xmlns=\"http://tempuri.org/\">\n      <intA>{{number1}}</intA>\n      <intB>{{number2}}</intB>\n    </Divide>\n  </soap:Body>\n</soap:Envelope>"
+						},
+						"url": {
+							"raw": "http://www.dneonline.com/calculator.asmx",
+							"protocol": "http",
+							"host": [
+								"www",
+								"dneonline",
+								"com"
+							],
+							"path": [
+								"calculator.asmx"
+							]
+						},
+						"description": "Divides two integers."
+					},
+					"response": []
+				},
+				{
+					"name": "Multiply",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let number1 = Math.floor((Math.random() * 100));\r",
+									"let number2 = Math.floor((Math.random() * 100));\r",
+									"\r",
+									"pm.collectionVariables.set(\"number1\", number1);\r",
+									"pm.collectionVariables.set(\"number2\", number2);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObj = xml2Json(responseBody);\r",
+									"\r",
+									"var number1 = pm.collectionVariables.get(\"number1\");\r",
+									"var number2 = pm.collectionVariables.get(\"number2\");\r",
+									"\r",
+									"var expectedResult  = number1 * number2;\r",
+									"\r",
+									"console.log('number1', number1);\r",
+									"console.log('number2, number2');\r",
+									"console.log('expectedResult', expectedResult);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"test division\", function() {\r",
+									"    pm.expect(jsonObj['soap:Envelope']['soap:Body']['MultiplyResponse']['MultiplyResult']).to.eql(expectedResult.toString());\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml; charset=utf-8",
+								"type": "text"
+							},
+							{
+								"key": "SOAPAction",
+								"value": "http://tempuri.org/Multiply",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <Multiply xmlns=\"http://tempuri.org/\">\n      <intA>{{number1}}</intA>\n      <intB>{{number2}}</intB>\n    </Multiply>\n  </soap:Body>\n</soap:Envelope>"
+						},
+						"url": {
+							"raw": "http://www.dneonline.com/calculator.asmx",
+							"protocol": "http",
+							"host": [
+								"www",
+								"dneonline",
+								"com"
+							],
+							"path": [
+								"calculator.asmx"
+							]
+						},
+						"description": "Multiplies two integers."
+					},
+					"response": []
+				}
+			],
+			"description": "A simple SOAP API calculator.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "number1",
+			"value": "10"
+		},
+		{
+			"key": "number2",
+			"value": "5"
+		},
+		{
+			"key": "result",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
